@@ -1,0 +1,66 @@
+$increase-font-size-on-larger-screens: false;
+@import "node_modules/vanilla-framework";
+@include vanilla;
+@include vf-base;
+@include vf-p-icons;
+
+// FormCard
+.form-card {
+    max-width: 750px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-card-section-grid {
+    display: grid;
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.form-card-section-grid-span-3 {
+    grid-column: span 3;
+    align-self: end;
+}
+
+// ColorPicker
+.react-colorful__saturation {
+    border-radius: 0 !important;
+}
+
+.react-colorful__hue {
+    border-radius: 0 !important;
+}
+
+.color-picker-input-field {
+    width: 200px;
+    border-radius: 0;
+    border: 0;
+    outline: none;
+    padding: 10px 10px 10px 25px;
+    background-color: #f3f3f3;
+    border-bottom: 1px solid #000;
+}
+
+.color-picker-wrapper {
+    position: relative;
+}
+
+.color-picker-wrapper::before {
+    content: "#";
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9d9d9d;
+    pointer-events: none;
+}
+
+// PlusButton
+.p-icon--plus {
+    @include vf-icon-plus(#000);
+}
