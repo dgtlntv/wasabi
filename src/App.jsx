@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import FormCard from "./components/FormCard"
+import Palette from "./components/Palette"
 
 export default function App() {
     const [lightBg, setLightBg] = useState("#ffffff")
@@ -17,12 +18,24 @@ export default function App() {
     const [lightnessTolerance, setLightnessTolerance] = useState(1)
     const [chromacityTolerance, setChromacityTolerance] = useState(1)
     const [targetContrastShades, setTargetContrastShades] = useState([54, 65, 77, 90, 100, 105])
+    const [targetColorGamut, setTargetColorGamut] = useState("p3")
     const [formSubmitted, setFormSubmitted] = useState(false)
 
     return (
         <>
             {formSubmitted ? (
-                <h1>Hi mum :)</h1>
+                <Palette
+                    lightBg={lightBg}
+                    darkBg={darkBg}
+                    primaryColor={primaryColor}
+                    secondaryColors={secondaryColors}
+                    contrastTolerance={contrastTolerance}
+                    lightnessTolerance={lightnessTolerance}
+                    chromacityTolerance={chromacityTolerance}
+                    targetContrastShades={targetContrastShades}
+                    targetColorGamut={targetColorGamut}
+                    setFormSubmitted={setFormSubmitted}
+                />
             ) : (
                 <FormCard
                     lightBg={lightBg}
@@ -41,6 +54,8 @@ export default function App() {
                     setChromacityTolerance={setChromacityTolerance}
                     targetContrastShades={targetContrastShades}
                     setTargetContrastShades={setTargetContrastShades}
+                    targetColorGamut={targetColorGamut}
+                    setTargetColorGamut={setTargetColorGamut}
                     setFormSubmitted={setFormSubmitted}
                 />
             )}

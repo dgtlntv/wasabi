@@ -23,6 +23,8 @@ export default function FormCard({
     targetContrastShades,
     setTargetContrastShades,
     setFormSubmitted,
+    targetColorGamut,
+    setTargetColorGamut,
 }) {
     const rectangleStyle = {
         width: "100%",
@@ -170,15 +172,18 @@ export default function FormCard({
                     in srgb.">
                 <div className="form-card-section-grid">
                     <FormCardRadio
-                        checked
+                        defaultChecked={targetColorGamut === "p3" ? true : false}
                         wrapperProps={{ className: "form-card-section-grid-span-3" }}
                         label="Display P3"
                         name="colorGamut"
+                        onChange={(e) => setTargetColorGamut("p3")}
                     />
                     <FormCardRadio
+                        defaultChecked={targetColorGamut === "srgb" ? true : false}
                         label="srgb"
                         name="colorGamut"
                         wrapperProps={{ className: "form-card-section-grid-span-3" }}
+                        onChange={(e) => setTargetColorGamut("srgb")}
                     />
                 </div>
             </FormCardSection>
