@@ -1,10 +1,5 @@
-import { converter } from "culori"
-import { apcach, crToBg, apcachToCss, maxChroma } from "apcach"
-import { calcAPCA } from "apca-w3"
-import { useEffect, useState } from "react"
-import replaceClosest from "../utils/replaceClosestInteger"
-import replaceClosestInteger from "../utils/replaceClosestInteger"
-import { inColorGamut } from "../utils/inColorGamut"
+import useGeneratePalette from "../hooks/useGeneratePalette"
+import sortTargetContrastShades from "../utils/sortTargetContrastShades"
 
 export default function Palette({
     lightBg,
@@ -18,85 +13,148 @@ export default function Palette({
     targetColorGamut,
     setFormSubmitted,
 }) {
-    const [shades, setShades] = useState(null)
-    const oklch = converter("oklch")
-
-    useEffect(() => {
-        const primaryColorOKLCH = oklch(primaryColor)
-        const contrastPrimaryColor = calcAPCA(primaryColor, lightBg)
-        targetContrastShades = replaceClosestInteger(targetContrastShades, contrastPrimaryColor)
-
-        const shades = []
-        for (const [index, contrast] of Object.entries(targetContrastShades)) {
-            if (contrast === contrastPrimaryColor) {
-                shades.push({
-                    name: parseInt(index) + 7,
-                    color:
-                        "oklch(" +
-                        primaryColorOKLCH["l"] * 100 +
-                        "% " +
-                        primaryColorOKLCH["c"] +
-                        " " +
-                        primaryColorOKLCH["h"] +
-                        ")",
-                    isPrimary: true,
-                    colorGamut: inColorGamut(primaryColorOKLCH),
-                })
-            } else {
-                const colorDark = apcach(
-                    crToBg(lightBg, contrast, "apca", "darker"),
-                    maxChroma(primaryColorOKLCH["c"]),
-                    primaryColorOKLCH["h"],
-                    100,
-                    targetColorGamut
-                )
-
-                const colorDarkGamut = inColorGamut(apcachToCss(colorDark, "p3"))
-
-                shades.push({
-                    name: parseInt(index) + 7,
-                    color: apcachToCss(colorDark, "oklch"),
-                    colorGamut: colorDarkGamut,
-                })
-            }
-            const colorLight = apcach(
-                crToBg(darkBg, contrast, "apca", "lighter"),
-                maxChroma(primaryColorOKLCH["c"]),
-                primaryColorOKLCH["h"],
-                100,
-                targetColorGamut
-            )
-
-            const colorLightGamut = inColorGamut(apcachToCss(colorLight, "p3"))
-
-            shades.push({ name: 6 - parseInt(index), color: apcachToCss(colorLight, "oklch"), colorGamut: colorLightGamut })
-        }
-        shades.sort((a, b) => a.name - b.name)
-        setShades(shades)
-    }, [])
+    const { adjustedTargetContrastShades, primaryShades, secondaryShades } = useGeneratePalette({
+        lightBg,
+        darkBg,
+        primaryColor,
+        secondaryColors,
+        contrastTolerance,
+        lightnessTolerance,
+        chromacityTolerance,
+        targetContrastShades,
+        targetColorGamut,
+    })
 
     return (
         <>
-            {shades ? (
-                <div style={{ display: "flex", gap: "10px" }}>
-                    {shades.map((shade, index) => {
+            {primaryShades && adjustedTargetContrastShades ? (
+                <div
+                    style={{
+                        display: "grid",
+                        gridTemplateColumns: `repeat(${primaryShades.length}, minmax(auto, 1fr))`,
+                        gap: "10px",
+                        padding: "20px",
+                    }}
+                >
+                    {sortTargetContrastShades(adjustedTargetContrastShades).map((contrastShade, index) => {
+                        return (
+                            <div key={index} style={{ textAlign: "center", marginBottom: "10px" }}>
+                                <h4 style={{ margin: "0", padding: "0" }}>{Math.round(contrastShade)}</h4>
+                            </div>
+                        )
+                    })}
+                    {primaryShades.map((shade, index) => {
                         return (
                             <div
                                 key={index}
                                 style={{
-                                    backgroundColor: shade.color,
-                                    width: "100px",
-                                    height: "100px",
+                                    backgroundColor: shade.colorCss,
+                                    aspectRatio: "1/1",
+                                    padding: "10px",
+                                    color: `${shade.isDark ? "white" : "black"}`,
                                     border: `${shade.isPrimary ? "4px solid #FF0000" : ""}`,
-                                }}>
-                                <p>{shade.name}</p>
-                                <p>{shade.colorGamut}</p>
+                                }}
+                            >
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        height: "100%",
+                                        alignItems: "center",
+                                        justifyContent: "space-between",
+                                    }}
+                                >
+                                    <div>
+                                        <p style={{ margin: "0", padding: "0" }}>
+                                            L: {Math.round(shade.color[0] * 100) / 100}
+                                        </p>
+                                        <p style={{ margin: "0", padding: "0" }}>
+                                            C: {Math.round(shade.color[1] * 100) / 100}
+                                        </p>
+                                        <p style={{ margin: "0", padding: "0" }}>
+                                            H: {Math.round(shade.color[2] * 100) / 100}
+                                        </p>
+                                    </div>
+                                    <p style={{ margin: "0", padding: "0" }}>Gamut: {shade.colorGamut}</p>
+                                </div>
                             </div>
                         )
                     })}
                 </div>
             ) : (
-                <p>generating...</p>
+                <p>Generating primary shades...</p>
+            )}
+            {secondaryShades ? (
+                <div
+                    style={{
+                        display: "grid",
+                        gridTemplateColumns: `repeat(${primaryShades.length}, minmax(auto, 1fr))`,
+                        gap: "10px",
+                        padding: "20px",
+                    }}
+                >
+                    {secondaryShades.map((shadesArray, index) => {
+                        shadesArray.map((shade, index) => {
+                            return (
+                                <>
+                                    {shade.name ? (
+                                        <div
+                                            key={index}
+                                            style={{
+                                                backgroundColor: shade.colorCss,
+                                                aspectRatio: "1/1",
+                                                padding: "10px",
+                                                color: `${shade.isDark ? "white" : "black"}`,
+                                                border: `${shade.isPrimary ? "4px solid #FF0000" : ""}`,
+                                            }}
+                                        >
+                                            <div
+                                                style={{
+                                                    display: "flex",
+                                                    flexDirection: "column",
+                                                    height: "100%",
+                                                    alignItems: "center",
+                                                    justifyContent: "space-between",
+                                                }}
+                                            >
+                                                <div>
+                                                    <p style={{ margin: "0", padding: "0" }}>
+                                                        L: {Math.round(shade.color[0] * 100) / 100}
+                                                    </p>
+                                                    <p style={{ margin: "0", padding: "0" }}>
+                                                        C: {Math.round(shade.color[1] * 100) / 100}
+                                                    </p>
+                                                    <p style={{ margin: "0", padding: "0" }}>
+                                                        H: {Math.round(shade.color[2] * 100) / 100}
+                                                    </p>
+                                                </div>
+                                                <p style={{ margin: "0", padding: "0" }}>Gamut: {shade.colorGamut}</p>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div
+                                            key={index}
+                                            style={{
+                                                backgroundColor: white,
+                                                aspectRatio: "1/1",
+                                                padding: "10px",
+                                                display: "flex",
+                                                flexDirection: "column",
+                                                height: "100%",
+                                                alignItems: "center",
+                                                justifyContent: "space-between",
+                                            }}
+                                        >
+                                            <p style={{ margin: "0", padding: "0" }}>No shade found</p>
+                                        </div>
+                                    )}
+                                </>
+                            )
+                        })
+                    })}
+                </div>
+            ) : (
+                <p>Generating secondary shades...</p>
             )}
         </>
     )
