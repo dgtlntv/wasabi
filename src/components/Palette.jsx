@@ -6,7 +6,6 @@ export default function Palette({
     darkBg,
     primaryColor,
     secondaryColors,
-    contrastTolerance,
     lightnessTolerance,
     chromacityTolerance,
     targetContrastShades,
@@ -18,7 +17,6 @@ export default function Palette({
         darkBg,
         primaryColor,
         secondaryColors,
-        contrastTolerance,
         lightnessTolerance,
         chromacityTolerance,
         targetContrastShades,
@@ -34,8 +32,7 @@ export default function Palette({
                         gridTemplateColumns: `repeat(${primaryShades.length}, minmax(auto, 1fr))`,
                         gap: "10px",
                         padding: "20px",
-                    }}
-                >
+                    }}>
                     {sortTargetContrastShades(adjustedTargetContrastShades).map((contrastShade, index) => {
                         return (
                             <div key={index} style={{ textAlign: "center", marginBottom: "10px" }}>
@@ -53,8 +50,7 @@ export default function Palette({
                                     padding: "10px",
                                     color: `${shade.isDark ? "white" : "black"}`,
                                     border: `${shade.isPrimary ? "4px solid #FF0000" : ""}`,
-                                }}
-                            >
+                                }}>
                                 <div
                                     style={{
                                         display: "flex",
@@ -62,8 +58,7 @@ export default function Palette({
                                         height: "100%",
                                         alignItems: "center",
                                         justifyContent: "space-between",
-                                    }}
-                                >
+                                    }}>
                                     <div>
                                         <p style={{ margin: "0", padding: "0" }}>
                                             L: {Math.round(shade.color[0] * 100) / 100}
@@ -91,64 +86,44 @@ export default function Palette({
                         gridTemplateColumns: `repeat(${primaryShades.length}, minmax(auto, 1fr))`,
                         gap: "10px",
                         padding: "20px",
-                    }}
-                >
+                    }}>
                     {secondaryShades.map((shadesArray, index) => {
-                        shadesArray.map((shade, index) => {
+                        return shadesArray.map((shade, index) => {
                             return (
-                                <>
-                                    {shade.name ? (
-                                        <div
-                                            key={index}
-                                            style={{
-                                                backgroundColor: shade.colorCss,
-                                                aspectRatio: "1/1",
-                                                padding: "10px",
-                                                color: `${shade.isDark ? "white" : "black"}`,
-                                                border: `${shade.isPrimary ? "4px solid #FF0000" : ""}`,
-                                            }}
-                                        >
-                                            <div
-                                                style={{
-                                                    display: "flex",
-                                                    flexDirection: "column",
-                                                    height: "100%",
-                                                    alignItems: "center",
-                                                    justifyContent: "space-between",
-                                                }}
-                                            >
-                                                <div>
-                                                    <p style={{ margin: "0", padding: "0" }}>
-                                                        L: {Math.round(shade.color[0] * 100) / 100}
-                                                    </p>
-                                                    <p style={{ margin: "0", padding: "0" }}>
-                                                        C: {Math.round(shade.color[1] * 100) / 100}
-                                                    </p>
-                                                    <p style={{ margin: "0", padding: "0" }}>
-                                                        H: {Math.round(shade.color[2] * 100) / 100}
-                                                    </p>
-                                                </div>
-                                                <p style={{ margin: "0", padding: "0" }}>Gamut: {shade.colorGamut}</p>
-                                            </div>
+                                <div
+                                    key={index}
+                                    style={{
+                                        backgroundColor: shade.colorCss,
+                                        aspectRatio: "1/1",
+                                        padding: "10px",
+                                        color: `${shade.isDark ? "white" : "black"}`,
+                                        border: `${shade.isPrimary ? "4px solid #FF0000" : ""}`,
+                                    }}>
+                                    <div
+                                        style={{
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            height: "100%",
+                                            alignItems: "center",
+                                            justifyContent: "space-between",
+                                        }}>
+                                        <div>
+                                            <p style={{ margin: "0", padding: "0" }}>
+                                                L: {Math.round(shade.color[0] * 100) / 100}
+                                            </p>
+                                            <p style={{ margin: "0", padding: "0" }}>
+                                                C: {Math.round(shade.color[1] * 100) / 100}
+                                            </p>
+                                            <p style={{ margin: "0", padding: "0" }}>
+                                                H: {Math.round(shade.color[2] * 100) / 100}
+                                            </p>
+                                            <p style={{ margin: "0", padding: "0" }}>
+                                                Contrast: {Math.round(shade.contrastValue * 100) / 100}
+                                            </p>
                                         </div>
-                                    ) : (
-                                        <div
-                                            key={index}
-                                            style={{
-                                                backgroundColor: white,
-                                                aspectRatio: "1/1",
-                                                padding: "10px",
-                                                display: "flex",
-                                                flexDirection: "column",
-                                                height: "100%",
-                                                alignItems: "center",
-                                                justifyContent: "space-between",
-                                            }}
-                                        >
-                                            <p style={{ margin: "0", padding: "0" }}>No shade found</p>
-                                        </div>
-                                    )}
-                                </>
+                                        <p style={{ margin: "0", padding: "0" }}>Gamut: {shade.colorGamut}</p>
+                                    </div>
+                                </div>
                             )
                         })
                     })}

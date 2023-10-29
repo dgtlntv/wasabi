@@ -12,7 +12,6 @@ export default function useGeneratePalette({
     darkBg,
     primaryColor,
     secondaryColors,
-    contrastTolerance,
     lightnessTolerance,
     chromacityTolerance,
     targetContrastShades,
@@ -45,7 +44,6 @@ export default function useGeneratePalette({
             secondaryColors,
             lightBg,
             darkBg,
-            contrastTolerance,
             lightnessTolerance,
             chromacityTolerance,
             targetColorGamut

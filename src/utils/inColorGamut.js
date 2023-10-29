@@ -9,6 +9,6 @@ export function inColorGamut(color) {
     } else if (inP3(color)) {
         return "p3"
     } else {
-        return "none"
+        return false
     }
 }

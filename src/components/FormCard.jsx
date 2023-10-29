@@ -14,8 +14,6 @@ export default function FormCard({
     setPrimaryColor,
     secondaryColors,
     setSecondaryColors,
-    contrastTolerance,
-    setContrastTolerance,
     lightnessTolerance,
     setLightnessTolerance,
     chromacityTolerance,
@@ -135,14 +133,6 @@ export default function FormCard({
                     color's shade. Therefore, we need to establish a tolerance of ± for the contrast, lightness, and
                     chromacity.">
                 <div className="form-card-section-grid">
-                    <FormCardInput
-                        wrapperProps={{ className: "form-card-section-grid-span-3" }}
-                        label="Contrast"
-                        inputProps={{
-                            value: contrastTolerance,
-                            onChange: (e) => setContrastTolerance(e.target.value),
-                        }}
-                    />
                     <FormCardInput
                         wrapperProps={{ className: "form-card-section-grid-span-3" }}
                         label="Lightness"
