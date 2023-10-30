@@ -5,11 +5,11 @@ export default function calculateAllSecondaryShades(
     secondaryColorsArray,
     lightBg,
     darkBg,
-    contrastTolerance,
     lightnessTolerance,
     chromacityTolerance,
     targetColorGamut
 ) {
+    const counterObject = { value: 0 }
     const colorShades = []
 
     for (const [index, color] of Object.entries(secondaryColorsArray)) {
@@ -19,13 +19,15 @@ export default function calculateAllSecondaryShades(
                 color,
                 lightBg,
                 darkBg,
-                contrastTolerance,
                 lightnessTolerance,
                 chromacityTolerance,
-                targetColorGamut
+                targetColorGamut,
+                counterObject
             )
         )
     }
+
+    console.log("Ran through" + counterObject.value + "possibilities")
 
     return colorShades
 }

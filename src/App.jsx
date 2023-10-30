@@ -11,8 +11,8 @@ export default function App() {
         "#f99b11",
         "#0e8420",
         "#24598f",
-        "#666666",
         "#0f95a1",
+        "#666666",
     ])
     const [lightnessTolerance, setLightnessTolerance] = useState(0.05)
     const [chromacityTolerance, setChromacityTolerance] = useState(0.05)
