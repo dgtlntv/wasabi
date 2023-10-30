@@ -8,6 +8,10 @@ export default function Palette({
     secondaryColors,
     lightnessTolerance,
     chromacityTolerance,
+    hueTolerance,
+    T,
+    T_min,
+    alpha,
     targetContrastShades,
     targetColorGamut,
     setFormSubmitted,
@@ -19,6 +23,10 @@ export default function Palette({
         secondaryColors,
         lightnessTolerance,
         chromacityTolerance,
+        hueTolerance,
+        T,
+        T_min,
+        alpha,
         targetContrastShades,
         targetColorGamut,
     })
@@ -32,7 +40,8 @@ export default function Palette({
                         gridTemplateColumns: `repeat(${primaryShades.length}, minmax(auto, 1fr))`,
                         gap: "10px",
                         padding: "20px",
-                    }}>
+                    }}
+                >
                     {sortTargetContrastShades(adjustedTargetContrastShades).map((contrastShade, index) => {
                         return (
                             <div key={index} style={{ textAlign: "center", marginBottom: "10px" }}>
@@ -50,7 +59,8 @@ export default function Palette({
                                     padding: "10px",
                                     color: `${shade.isDark ? "white" : "black"}`,
                                     border: `${shade.isPrimary ? "4px solid #FF0000" : ""}`,
-                                }}>
+                                }}
+                            >
                                 <div
                                     style={{
                                         display: "flex",
@@ -58,7 +68,8 @@ export default function Palette({
                                         height: "100%",
                                         alignItems: "center",
                                         justifyContent: "space-between",
-                                    }}>
+                                    }}
+                                >
                                     <div>
                                         <p style={{ margin: "0", padding: "0" }}>
                                             L: {Math.round(shade.color[0] * 100) / 100}
@@ -86,7 +97,8 @@ export default function Palette({
                         gridTemplateColumns: `repeat(${primaryShades.length}, minmax(auto, 1fr))`,
                         gap: "10px",
                         padding: "20px",
-                    }}>
+                    }}
+                >
                     {secondaryShades.map((shadesArray, index) => {
                         return shadesArray.map((shade, index) => {
                             return (
@@ -98,7 +110,8 @@ export default function Palette({
                                         padding: "10px",
                                         color: `${shade.isDark ? "white" : "black"}`,
                                         border: `${shade.isPrimary ? "4px solid #FF0000" : ""}`,
-                                    }}>
+                                    }}
+                                >
                                     <div
                                         style={{
                                             display: "flex",
@@ -106,7 +119,8 @@ export default function Palette({
                                             height: "100%",
                                             alignItems: "center",
                                             justifyContent: "space-between",
-                                        }}>
+                                        }}
+                                    >
                                         <div>
                                             <p style={{ margin: "0", padding: "0" }}>
                                                 L: {Math.round(shade.color[0] * 100) / 100}

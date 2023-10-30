@@ -60,7 +60,7 @@ function perturb(currentShade, minLightness, maxLightness, minChroma, maxChroma)
     const deltaChroma = (Math.random() - 0.5) * 0.01
 
     const newLightness = lightness + deltaLightness
-    const newChroma = chroma + deltaChroma
+    const newChroma = Math.max(0.01, chroma + deltaChroma)
 
     return [
         Math.max(minLightness, Math.min(maxLightness, newLightness)),

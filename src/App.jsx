@@ -16,6 +16,10 @@ export default function App() {
     ])
     const [lightnessTolerance, setLightnessTolerance] = useState(0.05)
     const [chromacityTolerance, setChromacityTolerance] = useState(0.05)
+    const [hueTolerance, setHueTolerance] = useState(10)
+    const [T, setT] = useState(100)
+    const [T_min, setT_min] = useState(0.001)
+    const [alpha, setAlpha] = useState(0.9)
     const [targetContrastShades, setTargetContrastShades] = useState([54, 65, 77, 90, 100, 105])
     const [targetColorGamut, setTargetColorGamut] = useState("p3")
     const [formSubmitted, setFormSubmitted] = useState(false)
@@ -30,6 +34,10 @@ export default function App() {
                     secondaryColors={secondaryColors}
                     lightnessTolerance={lightnessTolerance}
                     chromacityTolerance={chromacityTolerance}
+                    hueTolerance={hueTolerance}
+                    T={T}
+                    T_min={T_min}
+                    alpha={alpha}
                     targetContrastShades={targetContrastShades}
                     targetColorGamut={targetColorGamut}
                     setFormSubmitted={setFormSubmitted}
@@ -48,6 +56,14 @@ export default function App() {
                     setLightnessTolerance={setLightnessTolerance}
                     chromacityTolerance={chromacityTolerance}
                     setChromacityTolerance={setChromacityTolerance}
+                    hueTolerance={hueTolerance}
+                    setHueTolerance={setHueTolerance}
+                    T={T}
+                    setT={setT}
+                    T_min={T_min}
+                    setT_min={setT_min}
+                    alpha={alpha}
+                    setAlpha={setAlpha}
                     targetContrastShades={targetContrastShades}
                     setTargetContrastShades={setTargetContrastShades}
                     targetColorGamut={targetColorGamut}

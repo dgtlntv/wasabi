@@ -14,6 +14,10 @@ export default function useGeneratePalette({
     secondaryColors,
     lightnessTolerance,
     chromacityTolerance,
+    hueTolerance,
+    T,
+    T_min,
+    alpha,
     targetContrastShades,
     targetColorGamut,
 }) {
@@ -46,6 +50,10 @@ export default function useGeneratePalette({
             darkBg,
             lightnessTolerance,
             chromacityTolerance,
+            hueTolerance,
+            T,
+            T_min,
+            alpha,
             targetColorGamut
         )
         setSecondaryShades(sortSecondaryShades(allSecondaryShades))

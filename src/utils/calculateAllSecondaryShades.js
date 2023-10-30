@@ -7,6 +7,10 @@ export default function calculateAllSecondaryShades(
     darkBg,
     lightnessTolerance,
     chromacityTolerance,
+    hueTolerance,
+    T,
+    T_min,
+    alpha,
     targetColorGamut
 ) {
     const counterObject = { value: 0 }
@@ -21,6 +25,10 @@ export default function calculateAllSecondaryShades(
                 darkBg,
                 lightnessTolerance,
                 chromacityTolerance,
+                hueTolerance,
+                T,
+                T_min,
+                alpha,
                 targetColorGamut,
                 counterObject
             )

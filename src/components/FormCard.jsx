@@ -18,6 +18,14 @@ export default function FormCard({
     setLightnessTolerance,
     chromacityTolerance,
     setChromacityTolerance,
+    hueTolerance,
+    setHueTolerance,
+    T,
+    setT,
+    T_min,
+    setT_min,
+    alpha,
+    setAlpha,
     targetContrastShades,
     setTargetContrastShades,
     setFormSubmitted,
@@ -39,7 +47,8 @@ export default function FormCard({
                     background, and then adjust the nearest contrast step based on its value. This way, we don't need to
                     modify the main color to get the right contrast. Typically, you'd pick your primary brand color. We
                     create the first set of shades based on this color. These shades guide the lightness and chromacity
-                    targets for the other color shades in the palette.">
+                    targets for the other color shades in the palette."
+            >
                 <div className="form-card-section-grid">
                     <ColorSquare rectangleStyle={rectangleStyle} color={primaryColor} setColor={setPrimaryColor} />
                 </div>
@@ -51,7 +60,8 @@ export default function FormCard({
                     probable that the secondary colors you provide won't appear as is. They act more as a reference. Their
                     lightness and chromacity will be tailored according to the primary color's shades. While we aim to
                     maintain the original hue you've selected, to meet the desired lightness, chromacity, and contrast, we
-                    might need to tweak the hue. However, we'll strive to stay true to the initial hue.">
+                    might need to tweak the hue. However, we'll strive to stay true to the initial hue."
+            >
                 <div className="form-card-section-grid">
                     {secondaryColors.map((colorObj, index) => (
                         <ColorSquare
@@ -84,7 +94,8 @@ export default function FormCard({
                 title="Backgrounds"
                 description="We have to determine the contrast against certain backgrounds. Because this is a symetrical color
                     palette, we'll assess it against both dark and light backgrounds. Please select the default background
-                    colors for both the light and dark modes of your design system.">
+                    colors for both the light and dark modes of your design system."
+            >
                 <div className="form-card-section-grid">
                     <ColorSquare rectangleStyle={rectangleStyle} color={lightBg} setColor={setLightBg} />
                     <ColorSquare rectangleStyle={rectangleStyle} color={darkBg} setColor={setDarkBg} />
@@ -94,7 +105,8 @@ export default function FormCard({
             <FormCardSection
                 title="Contrast Steps"
                 description="For determining shades based on contrast, we need the preferred contrast levels. The default levels are
-                    those suggested by APCA.">
+                    those suggested by APCA."
+            >
                 <div className="form-card-section-grid">
                     {targetContrastShades
                         ? targetContrastShades.map((contrast, index) => (
@@ -131,7 +143,8 @@ export default function FormCard({
                     lightness and chromacity of the primary color's equivalent shade. To achieve an exact match, we might
                     need to adjust the hue considerably,and there's no guarantee of an exact match distinct from the primary
                     color's shade. Therefore, we need to establish a tolerance of ± for the contrast, lightness, and
-                    chromacity.">
+                    chromacity."
+            >
                 <div className="form-card-section-grid">
                     <FormCardInput
                         wrapperProps={{ className: "form-card-section-grid-span-3" }}
@@ -150,6 +163,47 @@ export default function FormCard({
                             onChange: (e) => setChromacityTolerance(e.target.value),
                         }}
                     />
+                    <FormCardInput
+                        wrapperProps={{ className: "form-card-section-grid-span-3" }}
+                        label="Hue"
+                        inputProps={{
+                            value: hueTolerance,
+                            onChange: (e) => setHueTolerance(e.target.value),
+                        }}
+                    />
+                </div>
+            </FormCardSection>
+
+            <FormCardSection
+                title="Simulated annealing"
+                description="To find the optimal shades simulated annealing is used. You can adjust for how long and how detailed its searching by adjusting the following parameters."
+            >
+                <div className="form-card-section-grid">
+                    <FormCardInput
+                        wrapperProps={{ className: "form-card-section-grid-span-3" }}
+                        label="Initial Temperature"
+                        inputProps={{
+                            value: T,
+                            id: "T",
+                            onChange: (e) => setT(e.target.value),
+                        }}
+                    />
+                    <FormCardInput
+                        wrapperProps={{ className: "form-card-section-grid-span-3" }}
+                        label="Minimum temperature"
+                        inputProps={{
+                            value: T_min,
+                            onChange: (e) => setT_min(e.target.value),
+                        }}
+                    />
+                    <FormCardInput
+                        wrapperProps={{ className: "form-card-section-grid-span-3" }}
+                        label="Cooling rate"
+                        inputProps={{
+                            value: alpha,
+                            onChange: (e) => setAlpha(e.target.value),
+                        }}
+                    />
                 </div>
             </FormCardSection>
 
@@ -159,7 +213,8 @@ export default function FormCard({
                     color gamut, but also for Display P3. You can choose if you want colors which are only available in the
                     Display P3 color gamut or if you want to force all colors to be in srgb. Be aware however, that if we
                     limit our color gamut to srgb we might need to adjust the shades more to find colors that are available
-                    in srgb.">
+                    in srgb."
+            >
                 <div className="form-card-section-grid">
                     <FormCardRadio
                         defaultChecked={targetColorGamut === "p3" ? true : false}
@@ -182,7 +237,8 @@ export default function FormCard({
                 <button
                     style={{ gridColumnStart: "4", gridColumnEnd: "7" }}
                     className="p-button--positive u-no-margin"
-                    onClick={() => setFormSubmitted(true)}>
+                    onClick={() => setFormSubmitted(true)}
+                >
                     Generate Palette
                 </button>
             </div>
