@@ -19,12 +19,10 @@ export default function useGenerateDataVizPalette({
     const [dataVizPalette, setDataVizPalette] = useState(null)
 
     useEffect(() => {
-        // Calculate the primary shades
-        const primaryColorOKLCH = hexToOklch(primaryColor)
         const dataVizColors = calculateDataVizPalette(
-            lightBg,
-            darkBg,
-            primaryColorOKLCH,
+            hexToOklch(lightBg),
+            hexToOklch(darkBg),
+            hexToOklch(primaryColor),
             targetColorGamut,
             spread,
             colorblindness,

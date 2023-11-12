@@ -29,6 +29,7 @@ export default function calculateSecondaryShades(
         T,
         T_min,
         alpha,
+        targetColorGamut,
         counterObject
     )
 

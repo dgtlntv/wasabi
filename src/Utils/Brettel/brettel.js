@@ -1,14 +1,22 @@
 import sRgbToLinearRgbLookup from "./sRgbToLinearRgbLookUp"
 import linearRgbtosRgb from "./linearRGBtosRGB"
 import { brettelParams } from "./brettelParams"
+import { converter, parse } from "culori"
 
-export default function brettel(srgb, t, severity) {
+export default function brettel(color, t, severity) {
+    // TODO: Adjust so this also works with P3
+
+    const toSRGB = toGamut("rgb", "oklch", differenceEuclidean("oklch"), 0)
+    const colorClamped = toSRGB(color)
+    const toRGB = converter("rgb")
+    const srgb = toRGB(colorClamped)
+
     const sRgbToLinearRgbLookUpTable = sRgbToLinearRgbLookup()
 
     var rgb = Array(3)
-    rgb[0] = sRgbToLinearRgbLookUpTable[srgb[0]]
-    rgb[1] = sRgbToLinearRgbLookUpTable[srgb[1]]
-    rgb[2] = sRgbToLinearRgbLookUpTable[srgb[2]]
+    rgb[0] = sRgbToLinearRgbLookUpTable[srgb[r]]
+    rgb[1] = sRgbToLinearRgbLookUpTable[srgb[g]]
+    rgb[2] = sRgbToLinearRgbLookUpTable[srgb[b]]
 
     var params = brettelParams[t]
     var separationPlaneNormal = params["separationPlaneNormal"]
@@ -34,5 +42,5 @@ export default function brettel(srgb, t, severity) {
     rgb_cvd[2] = rgb_cvd[2] * severity + rgb[2] * (1.0 - severity)
 
     // Go back to sRGB
-    return [linearRgbtosRgb(rgb_cvd[0]), linearRgbtosRgb(rgb_cvd[1]), linearRgbtosRgb(rgb_cvd[2])]
+    return parse(`rgb(${linearRgbtosRgb(rgb_cvd[0])}, ${linearRgbtosRgb(rgb_cvd[1])}, ${linearRgbtosRgb(rgb_cvd[2])})`)
 }

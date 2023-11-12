@@ -40,8 +40,7 @@ export default function ShadesPaletteResults({
                         gridTemplateColumns: `repeat(${primaryShades.length}, minmax(auto, 1fr))`,
                         gap: "10px",
                         padding: "20px",
-                    }}
-                >
+                    }}>
                     {sortTargetContrastShades(adjustedTargetContrastShades).map((contrastShade, index) => {
                         return (
                             <div key={index} style={{ textAlign: "center", marginBottom: "10px" }}>
@@ -59,8 +58,7 @@ export default function ShadesPaletteResults({
                                     padding: "10px",
                                     color: `${shade.isDark ? "white" : "black"}`,
                                     border: `${shade.isPrimary ? "4px solid #FF0000" : ""}`,
-                                }}
-                            >
+                                }}>
                                 <div
                                     style={{
                                         display: "flex",
@@ -68,17 +66,16 @@ export default function ShadesPaletteResults({
                                         height: "100%",
                                         alignItems: "center",
                                         justifyContent: "space-between",
-                                    }}
-                                >
+                                    }}>
                                     <div>
                                         <p style={{ margin: "0", padding: "0" }}>
-                                            L: {Math.round(shade.color[0] * 100) / 100}
+                                            L: {Math.round(shade.color["l"] * 100) / 100}
                                         </p>
                                         <p style={{ margin: "0", padding: "0" }}>
-                                            C: {Math.round(shade.color[1] * 100) / 100}
+                                            C: {Math.round(shade.color["c"] * 100) / 100}
                                         </p>
                                         <p style={{ margin: "0", padding: "0" }}>
-                                            H: {Math.round(shade.color[2] * 100) / 100}
+                                            H: {Math.round(shade.color["h"] * 100) / 100}
                                         </p>
                                     </div>
                                     <p style={{ margin: "0", padding: "0" }}>Gamut: {shade.colorGamut}</p>
@@ -97,8 +94,7 @@ export default function ShadesPaletteResults({
                         gridTemplateColumns: `repeat(${primaryShades.length}, minmax(auto, 1fr))`,
                         gap: "10px",
                         padding: "20px",
-                    }}
-                >
+                    }}>
                     {secondaryShades.map((shadesArray, index) => {
                         return shadesArray.map((shade, index) => {
                             return (
@@ -110,8 +106,7 @@ export default function ShadesPaletteResults({
                                         padding: "10px",
                                         color: `${shade.isDark ? "white" : "black"}`,
                                         border: `${shade.isPrimary ? "4px solid #FF0000" : ""}`,
-                                    }}
-                                >
+                                    }}>
                                     <div
                                         style={{
                                             display: "flex",
@@ -119,17 +114,16 @@ export default function ShadesPaletteResults({
                                             height: "100%",
                                             alignItems: "center",
                                             justifyContent: "space-between",
-                                        }}
-                                    >
+                                        }}>
                                         <div>
                                             <p style={{ margin: "0", padding: "0" }}>
-                                                L: {Math.round(shade.color[0] * 100) / 100}
+                                                L: {Math.round(shade.color["l"] * 100) / 100}
                                             </p>
                                             <p style={{ margin: "0", padding: "0" }}>
-                                                C: {Math.round(shade.color[1] * 100) / 100}
+                                                C: {Math.round(shade.color["c"] * 100) / 100}
                                             </p>
                                             <p style={{ margin: "0", padding: "0" }}>
-                                                H: {Math.round(shade.color[2] * 100) / 100}
+                                                H: {Math.round(shade.color["h"] * 100) / 100}
                                             </p>
                                             <p style={{ margin: "0", padding: "0" }}>
                                                 Contrast: {Math.round(shade.contrastValue * 100) / 100}

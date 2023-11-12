@@ -1,35 +1,25 @@
 import deltaERgb from "./deltaERgb"
-import oklchArrayToRgb from "./oklchArrayToRgb"
 import { Protanopia, Deuteranopia, Tritanopia } from "./Brettel/brettelFunctions"
 
-export default function averageDeltaEOfColorblindness(colorArray, colorblindness) {
+export default function averageDeltaEOfColorblindness(palette, colorblindness) {
     let totalDistance = 0
     let comparisons = 0
 
-    for (let i = 0; i < colorArray.length; i++) {
-        for (let j = i + 1; j < colorArray.length; j++) {
+    for (let i = 0; i < palette.length; i++) {
+        for (let j = i + 1; j < palette.length; j++) {
             switch (colorblindness) {
                 case "Protanopia":
-                    totalDistance += deltaERgb(
-                        Protanopia(oklchArrayToRgb(colorArray[i])),
-                        Protanopia(oklchArrayToRgb(colorArray[j]))
-                    )
+                    totalDistance += deltaERgb(Protanopia(palette[i]), Protanopia(palette[j]))
                     comparisons++
                     break
 
                 case "Deuteranopia":
-                    totalDistance += deltaERgb(
-                        Deuteranopia(oklchArrayToRgb(colorArray[i])),
-                        Deuteranopia(oklchArrayToRgb(colorArray[j]))
-                    )
+                    totalDistance += deltaERgb(Deuteranopia(palette[i]), Deuteranopia(palette[j]))
                     comparisons++
                     break
 
                 case "Tritanopia":
-                    totalDistance += deltaERgb(
-                        Tritanopia(oklchArrayToRgb(colorArray[i])),
-                        Tritanopia(oklchArrayToRgb(colorArray[j]))
-                    )
+                    totalDistance += deltaERgb(Tritanopia(palette[i]), Tritanopia(palette[j]))
                     comparisons++
                     break
             }

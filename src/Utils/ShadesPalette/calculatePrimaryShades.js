@@ -1,14 +1,14 @@
 import { apcach, crToBg, apcachToCss, maxChroma } from "apcach"
 import { inColorGamut } from "../inColorGamut"
-import oklchArrayToCss from "../oklchArrayToCss"
+import { formatCss, parse } from "culori"
 
 export default function calculatePrimaryShades(
+    primaryColor,
     lightBg,
     darkBg,
     targetContrastShades,
     targetColorGamut,
-    contrastPrimaryColor,
-    primaryColorOKLCH
+    contrastPrimaryColor
 ) {
     const shades = []
 
@@ -16,49 +16,45 @@ export default function calculatePrimaryShades(
         if (contrast === contrastPrimaryColor) {
             shades.push({
                 name: parseInt(index) + 7,
-                colorCss: oklchArrayToCss([primaryColorOKLCH["l"], primaryColorOKLCH["c"], primaryColorOKLCH["h"]]),
-                color: [primaryColorOKLCH["l"], primaryColorOKLCH["c"], primaryColorOKLCH["h"]],
+                colorCss: formatCss(primaryColor),
+                color: primaryColor,
                 isDark: true,
                 isPrimary: true,
-                colorGamut: inColorGamut(primaryColorOKLCH),
+                colorGamut: inColorGamut(primaryColor),
                 contrastValue: contrast,
             })
         } else {
             const colorDark = apcach(
-                crToBg(lightBg, contrast, "apca", "darker"),
-                maxChroma(primaryColorOKLCH["c"]),
-                primaryColorOKLCH["h"],
+                crToBg(formatCss(lightBg), contrast, "apca", "darker"),
+                maxChroma(primaryColor["c"]),
+                primaryColor["h"],
                 100,
                 targetColorGamut
             )
 
-            const colorDarkGamut = inColorGamut(apcachToCss(colorDark, "p3"))
-
             shades.push({
                 name: parseInt(index) + 7,
                 colorCss: apcachToCss(colorDark, "oklch"),
-                color: [colorDark["lightness"], colorDark["chroma"], colorDark["hue"]],
+                color: parse(apcachToCss(colorDark, "oklch")),
                 isDark: true,
-                colorGamut: colorDarkGamut,
+                colorGamut: inColorGamut(apcachToCss(colorDark, "p3")),
                 contrastValue: contrast,
             })
         }
         const colorLight = apcach(
-            crToBg(darkBg, contrast, "apca", "lighter"),
-            maxChroma(primaryColorOKLCH["c"]),
-            primaryColorOKLCH["h"],
+            crToBg(formatCss(darkBg), contrast, "apca", "lighter"),
+            maxChroma(primaryColor["c"]),
+            primaryColor["h"],
             100,
             targetColorGamut
         )
 
-        const colorLightGamut = inColorGamut(apcachToCss(colorLight, "p3"))
-
         shades.push({
             name: 6 - parseInt(index),
             colorCss: apcachToCss(colorLight, "oklch"),
-            color: [colorLight["lightness"], colorLight["chroma"], colorLight["hue"]],
+            color: parse(apcachToCss(colorLight, "oklch")),
             isDark: false,
-            colorGamut: colorLightGamut,
+            colorGamut: inColorGamut(apcachToCss(colorLight, "p3")),
             contrastValue: contrast,
         })
     }

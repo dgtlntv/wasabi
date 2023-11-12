@@ -1,6 +1,5 @@
+import calcApca from "../../Contrast/calcApca"
 import { inColorGamut } from "../../inColorGamut"
-import oklchArrayToHex from "../../oklchArrayToHex"
-import { calcAPCA } from "apca-w3"
 
 export default function annealLightnessChroma(
     primaryShade,
@@ -13,28 +12,29 @@ export default function annealLightnessChroma(
     T,
     T_min,
     alpha,
+    targetColorGamut,
     counterObject
 ) {
-    const minLightness = primaryShade.color[0] - lightnessTolerance
-    const maxLightness = primaryShade.color[0] + lightnessTolerance
-    const minChroma = primaryShade.color[1] - chromacityTolerance
-    const maxChroma = primaryShade.color[1] + chromacityTolerance
+    const minLightness = primaryShade.color["l"] - lightnessTolerance
+    const maxLightness = primaryShade.color["l"] + lightnessTolerance
+    const minChroma = primaryShade.color["c"] - chromacityTolerance
+    const maxChroma = primaryShade.color["c"] + chromacityTolerance
 
-    let currentShade = [primaryShade.color[0], primaryShade.color[1], hue]
-    let bestShade = [...currentShade]
-    let currentEnergy = energy(currentShade, primaryShade, lightBg, darkBg, targetContrast)
+    let currentShade = { ...primaryShade.color, h: hue }
+    let bestShade = { ...currentShade }
+    let currentEnergy = energy(currentShade, primaryShade, lightBg, darkBg, targetContrast, targetColorGamut)
 
     while (T > T_min) {
         let newShade = perturb(currentShade, minLightness, maxLightness, minChroma, maxChroma)
-        let newEnergy = energy(newShade, primaryShade, lightBg, darkBg, targetContrast)
+        let newEnergy = energy(newShade, primaryShade, lightBg, darkBg, targetContrast, targetColorGamut)
 
         if (newEnergy < currentEnergy || Math.exp((currentEnergy - newEnergy) / T) > Math.random()) {
-            currentShade = [...newShade]
+            currentShade = { ...newShade }
             currentEnergy = newEnergy
         }
 
-        if (currentEnergy < energy(bestShade, primaryShade, lightBg, darkBg, targetContrast)) {
-            bestShade = [...currentShade]
+        if (currentEnergy < energy(bestShade, primaryShade, lightBg, darkBg, targetContrast, targetColorGamut)) {
+            bestShade = { ...currentShade }
         }
 
         T = T * alpha
@@ -45,26 +45,27 @@ export default function annealLightnessChroma(
     return bestShade
 }
 
-function energy(testShade, primaryShade, lightBg, darkBg, targetContrast) {
-    let testContrast = Math.abs(calcAPCA(oklchArrayToHex(testShade), primaryShade.isDark ? lightBg : darkBg))
-    const inGamut = inColorGamut(oklchArrayToHex(testShade))
+function energy(testShade, primaryShade, lightBg, darkBg, targetContrast, targetColorGamut) {
+    let testContrast = Math.abs(calcApca(testShade, primaryShade.isDark ? lightBg : darkBg, targetColorGamut))
+    const inGamut = inColorGamut(testShade)
 
-    return inGamut && testContrast === targetContrast ? 0 : Math.abs(targetContrast - testContrast)
+    return inGamut === targetColorGamut && testContrast === targetContrast
+        ? 0
+        : inGamut === "outside"
+        ? 100000
+        : Math.abs(targetContrast - testContrast)
 }
 
 function perturb(currentShade, minLightness, maxLightness, minChroma, maxChroma) {
-    const lightness = currentShade[0]
-    const chroma = currentShade[1]
-
     const deltaLightness = (Math.random() - 0.5) * 0.01
     const deltaChroma = (Math.random() - 0.5) * 0.01
 
-    const newLightness = lightness + deltaLightness
-    const newChroma = Math.max(0.01, chroma + deltaChroma)
+    const newLightness = currentShade["l"] + deltaLightness
+    const newChroma = Math.max(0.01, currentShade["c"] + deltaChroma)
 
-    return [
-        Math.max(minLightness, Math.min(maxLightness, newLightness)),
-        Math.max(minChroma, Math.min(maxChroma, newChroma)),
-        currentShade[2],
-    ]
+    return {
+        ...currentShade,
+        l: Math.max(minLightness, Math.min(maxLightness, newLightness)),
+        c: Math.max(minChroma, Math.min(maxChroma, newChroma)),
+    }
 }
