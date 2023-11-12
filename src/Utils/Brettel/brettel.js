@@ -1,22 +1,15 @@
-import sRgbToLinearRgbLookup from "./sRgbToLinearRgbLookUp"
 import linearRgbtosRgb from "./linearRGBtosRGB"
 import { brettelParams } from "./brettelParams"
-import { converter, parse } from "culori"
+import { converter, parse, toGamut, differenceEuclidean } from "culori"
 
 export default function brettel(color, t, severity) {
-    // TODO: Adjust so this also works with P3
+    // TODO: There is currently no colorblindness imulator for P3 color space. Can we make it happen?
 
     const toSRGB = toGamut("rgb", "oklch", differenceEuclidean("oklch"), 0)
     const colorClamped = toSRGB(color)
+    const toLinearRGB = converter("lrgb")
     const toRGB = converter("rgb")
-    const srgb = toRGB(colorClamped)
-
-    const sRgbToLinearRgbLookUpTable = sRgbToLinearRgbLookup()
-
-    var rgb = Array(3)
-    rgb[0] = sRgbToLinearRgbLookUpTable[srgb[r]]
-    rgb[1] = sRgbToLinearRgbLookUpTable[srgb[g]]
-    rgb[2] = sRgbToLinearRgbLookUpTable[srgb[b]]
+    const linearRGB = toLinearRGB(colorClamped)
 
     var params = brettelParams[t]
     var separationPlaneNormal = params["separationPlaneNormal"]
@@ -25,22 +18,29 @@ export default function brettel(color, t, severity) {
 
     // Check on which plane we should project by comparing wih the separation plane normal.
     var dotWithSepPlane =
-        rgb[0] * separationPlaneNormal[0] + rgb[1] * separationPlaneNormal[1] + rgb[2] * separationPlaneNormal[2]
+        linearRGB["r"] * separationPlaneNormal[0] +
+        linearRGB["g"] * separationPlaneNormal[1] +
+        linearRGB["b"] * separationPlaneNormal[2]
     var rgbCvdFromRgb = dotWithSepPlane >= 0 ? rgbCvdFromRgb_1 : rgbCvdFromRgb_2
 
     // Transform to the full dichromat projection plane.
     var rgb_cvd = Array(3)
-    rgb_cvd[0] = rgbCvdFromRgb[0] * rgb[0] + rgbCvdFromRgb[1] * rgb[1] + rgbCvdFromRgb[2] * rgb[2]
-    rgb_cvd[1] = rgbCvdFromRgb[3] * rgb[0] + rgbCvdFromRgb[4] * rgb[1] + rgbCvdFromRgb[5] * rgb[2]
-    rgb_cvd[2] = rgbCvdFromRgb[6] * rgb[0] + rgbCvdFromRgb[7] * rgb[1] + rgbCvdFromRgb[8] * rgb[2]
+    rgb_cvd[0] = rgbCvdFromRgb[0] * linearRGB["r"] + rgbCvdFromRgb[1] * linearRGB["g"] + rgbCvdFromRgb[2] * linearRGB["b"]
+    rgb_cvd[1] = rgbCvdFromRgb[3] * linearRGB["r"] + rgbCvdFromRgb[4] * linearRGB["g"] + rgbCvdFromRgb[5] * linearRGB["b"]
+    rgb_cvd[2] = rgbCvdFromRgb[6] * linearRGB["r"] + rgbCvdFromRgb[7] * linearRGB["g"] + rgbCvdFromRgb[8] * linearRGB["b"]
 
     // Apply the severity factor as a linear interpolation.
     // It's the same to do it in the RGB space or in the LMS
     // space since it's a linear transform.
-    rgb_cvd[0] = rgb_cvd[0] * severity + rgb[0] * (1.0 - severity)
-    rgb_cvd[1] = rgb_cvd[1] * severity + rgb[1] * (1.0 - severity)
-    rgb_cvd[2] = rgb_cvd[2] * severity + rgb[2] * (1.0 - severity)
+    rgb_cvd[0] = rgb_cvd[0] * severity + linearRGB["r"] * (1.0 - severity)
+    rgb_cvd[1] = rgb_cvd[1] * severity + linearRGB["g"] * (1.0 - severity)
+    rgb_cvd[2] = rgb_cvd[2] * severity + linearRGB["b"] * (1.0 - severity)
 
     // Go back to sRGB
-    return parse(`rgb(${linearRgbtosRgb(rgb_cvd[0])}, ${linearRgbtosRgb(rgb_cvd[1])}, ${linearRgbtosRgb(rgb_cvd[2])})`)
+    return toRGB({
+        mode: "lrgb",
+        r: rgb_cvd[0],
+        g: rgb_cvd[1],
+        b: rgb_cvd[2],
+    })
 }
