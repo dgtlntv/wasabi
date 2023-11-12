@@ -1,6 +1,6 @@
 import annealHue from "./simulatedAnnealing/annealHue"
 
-export default function calculateSecondaryShades(
+export function calculateSecondaryShades(
     primaryShades,
     secondaryColor,
     lightBg,
@@ -15,7 +15,6 @@ export default function calculateSecondaryShades(
     counterObject
 ) {
     // TODO:
-    // 2. Make it so palette is displayed immediatly, not lagging on the submit button
     // 3. Adjust layout of shades so it doesnt overflow?
 
     const bestShades = annealHue(
