@@ -1,5 +1,5 @@
 import calcApca from "../../Contrast/calcApca"
-import { inColorGamut } from "../../inColorGamut"
+import { inColorGamut } from "../../General/inColorGamut"
 
 export default function annealLightnessChroma(
     primaryShade,

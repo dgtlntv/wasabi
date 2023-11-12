@@ -1,9 +1,9 @@
-import FormCardSection from "../FormCardSection"
-import FormCardWrapper from "../FormCardWrapper"
-import ColorSquare from "../ColorSquare"
-import FormCardInput from "../FormCardInput"
-import FormCardRadio from "../FormCardRadio"
-import FormCardCheckbox from "../FormCardCheckbox"
+import FormCardSection from "../FormCard/FormCardSection"
+import FormCardWrapper from "../FormCard/FormCardWrapper"
+import ColorSquare from "../FormCard/ColorSquare"
+import FormCardInput from "../FormCard/FormCardInput"
+import FormCardRadio from "../FormCard/FormCardRadio"
+import FormCardCheckbox from "../FormCard/FormCardCheckbox"
 
 export default function DataVizPaletteFormCard({
     primaryColor,
@@ -43,8 +43,7 @@ export default function DataVizPaletteFormCard({
         <FormCardWrapper title="Data viz palette configuration">
             <FormCardSection
                 title="Primary Color"
-                description="The main color of the palette remains unchanged. We'll develop other colors for the Dataviz palette from this one."
-            >
+                description="The main color of the palette remains unchanged. We'll develop other colors for the Dataviz palette from this one.">
                 <div className="form-card-section-grid">
                     <ColorSquare rectangleStyle={rectangleStyle} color={primaryColor} setColor={setPrimaryColor} />
                 </div>
@@ -54,8 +53,7 @@ export default function DataVizPaletteFormCard({
                 title="Backgrounds"
                 description="We have to determine the contrast against certain backgrounds. Because this is a symetrical color
                     palette, we'll assess it against both dark and light backgrounds. Please select the default background
-                    colors for both the light and dark modes of your design system."
-            >
+                    colors for both the light and dark modes of your design system.">
                 <div className="form-card-section-grid">
                     <ColorSquare rectangleStyle={rectangleStyle} color={lightBg} setColor={setLightBg} />
                     <ColorSquare rectangleStyle={rectangleStyle} color={darkBg} setColor={setDarkBg} />
@@ -66,8 +64,7 @@ export default function DataVizPaletteFormCard({
                 title="Weights"
                 description='In the energy function of the simulated annealing we are weighting different aspects of the palette
                 to evaluate how "good" a palette is. You can change the to weight those aspects here.
-                '
-            >
+                '>
                 <div className="form-card-section-grid">
                     <FormCardInput
                         wrapperProps={{ className: "form-card-section-grid-span-3" }}
@@ -99,8 +96,7 @@ export default function DataVizPaletteFormCard({
 
             <FormCardSection
                 title="Simulated annealing"
-                description="To find the optimal shades simulated annealing is used. You can adjust for how long and how detailed its searching by adjusting the following parameters."
-            >
+                description="To find the optimal shades simulated annealing is used. You can adjust for how long and how detailed its searching by adjusting the following parameters.">
                 <div className="form-card-section-grid">
                     <FormCardInput
                         wrapperProps={{ className: "form-card-section-grid-span-3" }}
@@ -136,8 +132,7 @@ export default function DataVizPaletteFormCard({
                     color gamut, but also for Display P3. You can choose if you want colors which are only available in the
                     Display P3 color gamut or if you want to force all colors to be in srgb. Be aware however, that if we
                     limit our color gamut to srgb we might need to adjust the shades more to find colors that are available
-                    in srgb."
-            >
+                    in srgb.">
                 <div className="form-card-section-grid">
                     <FormCardRadio
                         defaultChecked={targetColorGamut === "p3" ? true : false}
@@ -158,8 +153,7 @@ export default function DataVizPaletteFormCard({
 
             <FormCardSection
                 title="Peturb options"
-                description="You can choose which things should be adjusted when changing the colors, otherwise they will be the same as the primary color."
-            >
+                description="You can choose which things should be adjusted when changing the colors, otherwise they will be the same as the primary color.">
                 <div className="form-card-section-grid">
                     <FormCardCheckbox
                         defaultChecked={perturbOptions[0]}
@@ -186,8 +180,7 @@ export default function DataVizPaletteFormCard({
 
             <FormCardSection
                 title="Amount of Colors in Palette"
-                description="Set the amount of colors you want to have in your palette"
-            >
+                description="Set the amount of colors you want to have in your palette">
                 <div className="form-card-section-grid">
                     <FormCardInput
                         wrapperProps={{ className: "form-card-section-grid-span-3" }}
@@ -205,8 +198,7 @@ export default function DataVizPaletteFormCard({
                 <button
                     style={{ gridColumnStart: "4", gridColumnEnd: "7" }}
                     className="p-button--positive u-no-margin"
-                    onClick={() => setFormSubmitted(true)}
-                >
+                    onClick={() => setFormSubmitted(true)}>
                     Generate Shades Palette
                 </button>
             </div>

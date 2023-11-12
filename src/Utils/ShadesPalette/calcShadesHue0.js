@@ -1,4 +1,4 @@
-import { inColorGamut } from "../inColorGamut"
+import { inColorGamut } from "../General/inColorGamut"
 import calcApca from "../Contrast/calcApca"
 import { formatCss } from "culori"
 

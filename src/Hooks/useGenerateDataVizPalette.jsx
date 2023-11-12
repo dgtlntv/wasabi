@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
-import hexToOklch from "../../Utils/Misc/hexToOklch"
-import calculateDataVizPalette from "../../Utils/DataVizPalette/calculateDataVizPalette"
+import hexToOklch from "../Utils/General/hexToOklch"
+import calculateDataVizPalette from "../Utils/DataVizPalette/calculateDataVizPalette"
 
 export default function useGenerateDataVizPalette({
     lightBg,

@@ -1,4 +1,4 @@
-import { inColorGamut } from "../../inColorGamut"
+import { inColorGamut } from "../../General/inColorGamut"
 import annealLightnessChroma from "./annealLightnessChroma"
 import calcShadesHue0 from "../calcShadesHue0"
 import calcApca from "../../Contrast/calcApca"

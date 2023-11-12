@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react"
-import replaceClosestInteger from "../../Utils/ShadesPalette/replaceClosestInteger"
-import calculatePrimaryShades from "../../Utils/ShadesPalette/calculatePrimaryShades"
-import calculateAllSecondaryShades from "../../Utils/ShadesPalette/calculateAllSecondaryShades"
-import sortPrimaryShades from "../../Utils/ShadesPalette/sortPrimaryColorShades"
-import sortSecondaryShades from "../../Utils/ShadesPalette/sortSecondaryShades"
-import hexToOklch from "../../Utils/hexToOklch"
-import calcApca from "../../Utils/Contrast/calcApca"
+import replaceClosestInteger from "../Utils/ShadesPalette/replaceClosestInteger"
+import calculatePrimaryShades from "../Utils/ShadesPalette/calculatePrimaryShades"
+import calculateAllSecondaryShades from "../Utils/ShadesPalette/calculateAllSecondaryShades"
+import sortPrimaryShades from "../Utils/ShadesPalette/sortPrimaryColorShades"
+import hexToOklch from "../Utils/General/hexToOklch"
+import calcApca from "../Utils/Contrast/calcApca"
 
 export default function useGenerateShadesPalette({
     lightBg,
@@ -57,9 +56,9 @@ export default function useGenerateShadesPalette({
             T,
             T_min,
             alpha,
-            targetColorGamut
+            targetColorGamut,
+            setSecondaryShades
         )
-        setSecondaryShades(sortSecondaryShades(allSecondaryShades))
     }, [])
 
     return { adjustedTargetContrastShades, primaryShades, secondaryShades }

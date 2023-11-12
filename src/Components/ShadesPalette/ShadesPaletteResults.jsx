@@ -1,4 +1,4 @@
-import useGenerateShadesPalette from "../../Hooks/ShadesPalette/useGenerateShadesPalette"
+import useGenerateShadesPalette from "../../Hooks/useGenerateShadesPalette"
 import sortTargetContrastShades from "../../Utils/ShadesPalette/sortTargetContrastShades"
 
 export default function ShadesPaletteResults({

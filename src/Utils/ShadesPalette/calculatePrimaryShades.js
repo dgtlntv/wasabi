@@ -1,5 +1,5 @@
 import { apcach, crToBg, apcachToCss, maxChroma } from "apcach"
-import { inColorGamut } from "../inColorGamut"
+import { inColorGamut } from "../General/inColorGamut"
 import { formatCss, parse } from "culori"
 
 export default function calculatePrimaryShades(

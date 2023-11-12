@@ -1,4 +1,4 @@
-import useGenerateDataVizPalette from "../../Hooks/DataVizPalette/useGenerateDataVizPalette"
+import useGenerateDataVizPalette from "../../Hooks/useGenerateDataVizPalette"
 
 export default function DataVizPaletteResults({
     primaryColor,

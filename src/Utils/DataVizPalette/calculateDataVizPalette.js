@@ -2,7 +2,7 @@ import averageDeltaEOfOklchArray from "./averageDeltaEOfOklchArray"
 import averageDeltaEOfColorblindness from "./averageDeltaEOfColorblindness"
 import averageContrastToBg from "./averageContrastToBg"
 import averageContrastColorsArray from "./averageContrastColorsArray"
-import { inColorGamut } from "../Misc/inColorGamut"
+import { inColorGamut } from "../General/inColorGamut"
 import { formatCss } from "culori"
 
 export default function calculateDataVizPalette(

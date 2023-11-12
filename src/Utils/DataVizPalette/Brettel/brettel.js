@@ -1,4 +1,3 @@
-import linearRgbtosRgb from "./linearRGBtosRGB"
 import { brettelParams } from "./brettelParams"
 import { converter, parse, toGamut, differenceEuclidean } from "culori"
 
