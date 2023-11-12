@@ -1,6 +1,6 @@
 import { apcach, crToBg, apcachToCss, maxChroma } from "apcach"
-import { inColorGamut } from "./inColorGamut"
-import oklchArrayToCss from "./oklchArrayToCss"
+import { inColorGamut } from "../inColorGamut"
+import oklchArrayToCss from "../oklchArrayToCss"
 
 export default function calculatePrimaryShades(
     lightBg,

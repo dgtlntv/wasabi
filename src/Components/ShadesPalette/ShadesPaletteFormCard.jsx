@@ -1,11 +1,11 @@
-import ColorSquare from "./ColorSquare"
-import PlusButton from "./PlusButton"
-import FormCardSection from "./FormCardSection"
-import FormCardInput from "./FormCardInput"
-import FormCardRadio from "./FormCardRadio"
-import FormCardWrapper from "./FormCardWrapper"
+import ColorSquare from "../ColorSquare"
+import PlusButton from "../PlusButton"
+import FormCardSection from "../FormCardSection"
+import FormCardInput from "../FormCardInput"
+import FormCardRadio from "../FormCardRadio"
+import FormCardWrapper from "../FormCardWrapper"
 
-export default function FormCard({
+export default function ShadesPaletteFormCard({
     lightBg,
     setLightBg,
     darkBg,
@@ -40,7 +40,7 @@ export default function FormCard({
     }
 
     return (
-        <FormCardWrapper title={"Color palette configuration"}>
+        <FormCardWrapper title={"Shades palette configuration"}>
             <FormCardSection
                 title="Primary Color"
                 description="The main color of the palette remains unchanged. We'll measure how it contrasts against a white
@@ -239,7 +239,7 @@ export default function FormCard({
                     className="p-button--positive u-no-margin"
                     onClick={() => setFormSubmitted(true)}
                 >
-                    Generate Palette
+                    Generate Shades Palette
                 </button>
             </div>
         </FormCardWrapper>

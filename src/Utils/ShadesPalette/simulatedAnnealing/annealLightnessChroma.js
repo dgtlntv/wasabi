@@ -1,5 +1,5 @@
-import { inColorGamut } from "../inColorGamut"
-import oklchArrayToHex from "../oklchArrayToHex"
+import { inColorGamut } from "../../inColorGamut"
+import oklchArrayToHex from "../../oklchArrayToHex"
 import { calcAPCA } from "apca-w3"
 
 export default function annealLightnessChroma(

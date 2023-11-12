@@ -1,7 +1,7 @@
 import { calcAPCA } from "apca-w3"
-import { inColorGamut } from "./inColorGamut"
-import oklchArrayToHex from "./oklchArrayToHex"
-import oklchArrayToCss from "./oklchArrayToCss"
+import { inColorGamut } from "../inColorGamut"
+import oklchArrayToHex from "../oklchArrayToHex"
+import oklchArrayToCss from "../oklchArrayToCss"
 
 export default function calcShadesHue0(primaryShades, lightBg, darkBg) {
     const shades = []

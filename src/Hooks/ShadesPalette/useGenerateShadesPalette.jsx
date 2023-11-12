@@ -1,13 +1,13 @@
 import { calcAPCA } from "apca-w3"
 import { useEffect, useState } from "react"
-import replaceClosestInteger from "../utils/replaceClosestInteger"
-import calculatePrimaryShades from "../utils/calculatePrimaryShades"
-import calculateAllSecondaryShades from "../utils/calculateAllSecondaryShades"
-import sortPrimaryShades from "../utils/sortPrimaryColorShades"
-import sortSecondaryShades from "../utils/sortSecondaryShades"
-import hexToOklch from "../utils/hexToOklch"
+import replaceClosestInteger from "../../Utils/ShadesPalette/replaceClosestInteger"
+import calculatePrimaryShades from "../../Utils/ShadesPalette/calculatePrimaryShades"
+import calculateAllSecondaryShades from "../../Utils/ShadesPalette/calculateAllSecondaryShades"
+import sortPrimaryShades from "../../Utils/ShadesPalette/sortPrimaryColorShades"
+import sortSecondaryShades from "../../Utils/ShadesPalette/sortSecondaryShades"
+import hexToOklch from "../../Utils/hexToOklch"
 
-export default function useGeneratePalette({
+export default function useGenerateShadesPalette({
     lightBg,
     darkBg,
     primaryColor,

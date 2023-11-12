@@ -1,7 +1,7 @@
-import useGeneratePalette from "../hooks/useGeneratePalette"
-import sortTargetContrastShades from "../utils/sortTargetContrastShades"
+import useGenerateShadesPalette from "../../Hooks/ShadesPalette/useGenerateShadesPalette"
+import sortTargetContrastShades from "../../Utils/ShadesPalette/sortTargetContrastShades"
 
-export default function Palette({
+export default function ShadesPaletteResults({
     lightBg,
     darkBg,
     primaryColor,
@@ -16,7 +16,7 @@ export default function Palette({
     targetColorGamut,
     setFormSubmitted,
 }) {
-    const { adjustedTargetContrastShades, primaryShades, secondaryShades } = useGeneratePalette({
+    const { adjustedTargetContrastShades, primaryShades, secondaryShades } = useGenerateShadesPalette({
         lightBg,
         darkBg,
         primaryColor,

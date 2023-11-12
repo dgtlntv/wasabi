@@ -1,8 +1,8 @@
 import { calcAPCA } from "apca-w3"
-import { inColorGamut } from "../inColorGamut"
-import oklchArrayToCss from "../oklchArrayToCss"
-import oklchArrayToHex from "../oklchArrayToHex"
-import hexToOklch from "../hexToOklch"
+import { inColorGamut } from "../../inColorGamut"
+import oklchArrayToCss from "../../oklchArrayToCss"
+import oklchArrayToHex from "../../oklchArrayToHex"
+import hexToOklch from "../../hexToOklch"
 import annealLightnessChroma from "./annealLightnessChroma"
 import calcShadesHue0 from "../calcShadesHue0"
 
@@ -104,7 +104,9 @@ function calcShades(
             counterObject
         )
 
-        const optimalContrast = Math.abs(calcAPCA(oklchArrayToHex(optimalShade), primaryShade.isDark ? lightBg : darkBg))
+        const optimalContrast = Math.abs(
+            calcAPCA(oklchArrayToHex(optimalShade), primaryShade.isDark ? lightBg : darkBg)
+        )
 
         shades.push({
             color: optimalShade,

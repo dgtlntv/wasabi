@@ -17,7 +17,6 @@ export default function calculateSecondaryShades(
     // TODO:
     // 2. Make it so palette is displayed immediatly, not lagging on the submit button
     // 3. Adjust layout of shades so it doesnt overflow?
-    // 5. Adjust perturb config
 
     const bestShades = annealHue(
         primaryShades,
