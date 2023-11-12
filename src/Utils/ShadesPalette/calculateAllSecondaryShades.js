@@ -1,5 +1,5 @@
-import hexToOklch from "../hexToOklch"
-import calculateSecondaryShades from "./calculateSecondaryShades"
+import shadesWorker from "./worker/shadesWorker"
+import WebWorker from "./Worker/WebWorker"
 
 export default function calculateAllSecondaryShades(
     primaryShades,
@@ -12,31 +12,35 @@ export default function calculateAllSecondaryShades(
     T,
     T_min,
     alpha,
-    targetColorGamut
+    targetColorGamut,
+    setSecondaryShades
 ) {
+    const webWorker = new WebWorker(shadesWorker)
     const counterObject = { value: 0 }
-    const colorShades = []
+
+    webWorker.addEventListener("message", (e) => {
+        setSecondaryShades((prevShades) => [...prevShades, e.data])
+    })
 
     for (const [index, color] of Object.entries(secondaryColorsArray)) {
-        colorShades.push(
-            calculateSecondaryShades(
-                primaryShades,
-                hexToOklch(color),
-                lightBg,
-                darkBg,
-                lightnessTolerance,
-                chromacityTolerance,
-                hueTolerance,
-                T,
-                T_min,
-                alpha,
-                targetColorGamut,
-                counterObject
-            )
-        )
+        webWorker.postMessage({
+            primaryShades,
+            color,
+            lightBg,
+            darkBg,
+            lightnessTolerance,
+            chromacityTolerance,
+            hueTolerance,
+            T,
+            T_min,
+            alpha,
+            targetColorGamut,
+            counterObject,
+        })
     }
-    // TODO: Surface this stat on the page
-    console.log("Ran through" + counterObject.value + "possibilities")
 
-    return colorShades
+    console.log("Ran through " + counterObject.value + " possibilities")
+    return () => {
+        webWorker.terminate()
+    }
 }
