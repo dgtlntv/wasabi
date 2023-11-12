@@ -1,3 +1,4 @@
+import hexToOklch from "../hexToOklch"
 import calculateSecondaryShades from "./calculateSecondaryShades"
 
 export default function calculateAllSecondaryShades(
@@ -20,7 +21,7 @@ export default function calculateAllSecondaryShades(
         colorShades.push(
             calculateSecondaryShades(
                 primaryShades,
-                color,
+                hexToOklch(color),
                 lightBg,
                 darkBg,
                 lightnessTolerance,
@@ -34,7 +35,7 @@ export default function calculateAllSecondaryShades(
             )
         )
     }
-
+    // TODO: Surface this stat on the page
     console.log("Ran through" + counterObject.value + "possibilities")
 
     return colorShades

@@ -1,10 +1,8 @@
-import { calcAPCA } from "apca-w3"
 import { inColorGamut } from "../../inColorGamut"
-import oklchArrayToCss from "../../oklchArrayToCss"
-import oklchArrayToHex from "../../oklchArrayToHex"
-import hexToOklch from "../../hexToOklch"
 import annealLightnessChroma from "./annealLightnessChroma"
 import calcShadesHue0 from "../calcShadesHue0"
+import calcApca from "../../Contrast/calcApca"
+import { formatCss } from "culori"
 
 export default function annealHue(
     primaryShades,
@@ -17,20 +15,19 @@ export default function annealHue(
     T,
     T_min,
     alpha,
+    targetColorGamut,
     counterObject
 ) {
-    const secondaryColorOKLCH = hexToOklch(secondaryColor)
-
-    if (secondaryColorOKLCH["h"] === undefined) {
-        return calcShadesHue0(primaryShades, lightBg, darkBg)
+    if (secondaryColor["h"] === undefined) {
+        return calcShadesHue0(primaryShades, lightBg, darkBg, targetColorGamut)
     }
 
-    const minHue = secondaryColorOKLCH["h"] - hueTolerance
-    const maxHue = secondaryColorOKLCH["h"] + hueTolerance
+    const minHue = secondaryColor["h"] - hueTolerance
+    const maxHue = secondaryColor["h"] + hueTolerance
 
     let currentSecondaryShades = calcShades(
         primaryShades,
-        secondaryColorOKLCH["h"],
+        secondaryColor["h"],
         lightBg,
         darkBg,
         lightnessTolerance,
@@ -38,6 +35,7 @@ export default function annealHue(
         T,
         T_min,
         alpha,
+        targetColorGamut,
         counterObject
     )
 
@@ -45,7 +43,7 @@ export default function annealHue(
     let currentEnergy = energy(currentSecondaryShades, primaryShades)
 
     while (T > T_min) {
-        let newHue = perturb(currentSecondaryShades[0].color[2], minHue, maxHue)
+        let newHue = perturb(currentSecondaryShades[0].color["h"], minHue, maxHue)
         let newShades = calcShades(
             primaryShades,
             newHue,
@@ -56,6 +54,7 @@ export default function annealHue(
             T,
             T_min,
             alpha,
+            targetColorGamut,
             counterObject
         )
         let newEnergy = energy(newShades, primaryShades)
@@ -85,6 +84,7 @@ function calcShades(
     T,
     T_min,
     alpha,
+    targetColorGamut,
     counterObject
 ) {
     const shades = []
@@ -101,19 +101,17 @@ function calcShades(
             T,
             T_min,
             alpha,
+            targetColorGamut,
             counterObject
         )
-
-        const optimalContrast = Math.abs(
-            calcAPCA(oklchArrayToHex(optimalShade), primaryShade.isDark ? lightBg : darkBg)
-        )
+        const optimalContrast = Math.abs(calcApca(optimalShade, primaryShade.isDark ? lightBg : darkBg, targetColorGamut))
 
         shades.push({
             color: optimalShade,
-            colorCss: oklchArrayToCss(optimalShade),
+            colorCss: formatCss(optimalShade),
             name: primaryShade.name,
             isDark: primaryShade.isDark,
-            colorGamut: inColorGamut(oklchArrayToHex(optimalShade)),
+            colorGamut: inColorGamut(optimalShade),
             contrastValue: optimalContrast,
         })
     }
@@ -122,10 +120,6 @@ function calcShades(
 }
 
 function energy(currentSecondaryShades, primaryShades) {
-    if (currentSecondaryShades.length !== primaryShades.length) {
-        throw new Error("The lengths of currentSecondaryShades and primaryShades must be the same.")
-    }
-
     let totalDivergence = 0
     let allInGamut = true
 

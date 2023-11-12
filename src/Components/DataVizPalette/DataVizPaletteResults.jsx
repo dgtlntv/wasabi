@@ -39,8 +39,7 @@ export default function DataVizPaletteResults({
                         gridTemplateColumns: `repeat(${dataVizPalette.length}, minmax(auto, 1fr))`,
                         gap: "10px",
                         padding: "20px",
-                    }}
-                >
+                    }}>
                     {dataVizPalette.map((shade, index) => {
                         console.log(shade)
                         return (
@@ -51,8 +50,7 @@ export default function DataVizPaletteResults({
                                     aspectRatio: "1/1",
                                     padding: "10px",
                                     color: "white",
-                                }}
-                            >
+                                }}>
                                 <div
                                     style={{
                                         display: "flex",
@@ -60,17 +58,16 @@ export default function DataVizPaletteResults({
                                         height: "100%",
                                         alignItems: "center",
                                         justifyContent: "space-between",
-                                    }}
-                                >
+                                    }}>
                                     <div>
                                         <p style={{ margin: "0", padding: "0" }}>
-                                            L: {Math.round(shade.color[0] * 100) / 100}
+                                            L: {Math.round(shade.color["l"] * 100) / 100}
                                         </p>
                                         <p style={{ margin: "0", padding: "0" }}>
-                                            C: {Math.round(shade.color[1] * 100) / 100}
+                                            C: {Math.round(shade.color["c"] * 100) / 100}
                                         </p>
                                         <p style={{ margin: "0", padding: "0" }}>
-                                            H: {Math.round(shade.color[2] * 100) / 100}
+                                            H: {Math.round(shade.color["h"] * 100) / 100}
                                         </p>
                                     </div>
                                     <p style={{ margin: "0", padding: "0" }}>Gamut: {shade.colorGamut}</p>

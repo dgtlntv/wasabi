@@ -1,4 +1,3 @@
-import { calcAPCA } from "apca-w3"
 import { useEffect, useState } from "react"
 import replaceClosestInteger from "../../Utils/ShadesPalette/replaceClosestInteger"
 import calculatePrimaryShades from "../../Utils/ShadesPalette/calculatePrimaryShades"
@@ -6,6 +5,7 @@ import calculateAllSecondaryShades from "../../Utils/ShadesPalette/calculateAllS
 import sortPrimaryShades from "../../Utils/ShadesPalette/sortPrimaryColorShades"
 import sortSecondaryShades from "../../Utils/ShadesPalette/sortSecondaryShades"
 import hexToOklch from "../../Utils/hexToOklch"
+import calcApca from "../../Utils/Contrast/calcApca"
 
 export default function useGenerateShadesPalette({
     lightBg,
@@ -27,16 +27,19 @@ export default function useGenerateShadesPalette({
 
     useEffect(() => {
         // Calculate the primary shades
-        const primaryColorOKLCH = hexToOklch(primaryColor)
-        const contrastPrimaryColor = calcAPCA(primaryColor, lightBg)
+        primaryColor = hexToOklch(primaryColor)
+        lightBg = hexToOklch(lightBg)
+        darkBg = hexToOklch(darkBg)
+
+        const contrastPrimaryColor = calcApca(primaryColor, lightBg, targetColorGamut)
         const adjustedTargetContrastShades = replaceClosestInteger(targetContrastShades, contrastPrimaryColor)
         const primaryShades = calculatePrimaryShades(
+            primaryColor,
             lightBg,
             darkBg,
             adjustedTargetContrastShades,
             targetColorGamut,
-            contrastPrimaryColor,
-            primaryColorOKLCH
+            contrastPrimaryColor
         )
         // Already set the primary shades so they can already be displayed.
         setAdjustedTargetContrastShades(adjustedTargetContrastShades)

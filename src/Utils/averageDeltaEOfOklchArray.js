@@ -1,12 +1,12 @@
 import deltaEOklch from "./deltaEOklch"
 
-export default function averageDeltaEOfOklchArray(colorArray) {
+export default function averageDeltaEOfOklchArray(palette) {
     let totalDistance = 0
     let comparisons = 0
 
-    for (let i = 0; i < colorArray.length; i++) {
-        for (let j = i + 1; j < colorArray.length; j++) {
-            totalDistance += deltaEOklch(colorArray[i], colorArray[j])
+    for (let i = 0; i < palette.length; i++) {
+        for (let j = i + 1; j < palette.length; j++) {
+            totalDistance += deltaEOklch(palette[i], palette[j])
             comparisons++
         }
     }
