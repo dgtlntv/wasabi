@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import hexToOklch from "../../Utils/hexToOklch"
+import hexToOklch from "../../Utils/Misc/hexToOklch"
 import calculateDataVizPalette from "../../Utils/DataVizPalette/calculateDataVizPalette"
 
 export default function useGenerateDataVizPalette({

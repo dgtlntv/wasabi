@@ -1,4 +1,4 @@
-import calcApca from "./Contrast/calcApca"
+import calcApca from "../Contrast/calcApca"
 
 export default function averageContrastToBg(palette, bg, targetColorGamut) {
     let totalContrast = 0

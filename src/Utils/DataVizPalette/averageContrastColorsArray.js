@@ -1,4 +1,4 @@
-import calcApca from "./Contrast/calcApca"
+import calcApca from "../Contrast/calcApca"
 
 export default function averageContrastColorsArray(palette, targetColorGamut) {
     let totalDistance = 0
