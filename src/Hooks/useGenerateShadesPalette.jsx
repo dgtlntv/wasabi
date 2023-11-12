@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react"
 import replaceClosestInteger from "../Utils/ShadesPalette/replaceClosestInteger"
 import calculatePrimaryShades from "../Utils/ShadesPalette/calculatePrimaryShades"
-import calculateAllSecondaryShades from "../Utils/ShadesPalette/calculateAllSecondaryShades"
 import sortPrimaryShades from "../Utils/ShadesPalette/sortPrimaryColorShades"
 import hexToOklch from "../Utils/General/hexToOklch"
 import calcApca from "../Utils/Contrast/calcApca"
+import sortSecondaryShades from "../Utils/ShadesPalette/sortSecondaryShades"
+import { wrap } from "comlink"
 
 export default function useGenerateShadesPalette({
     lightBg,
@@ -20,45 +21,56 @@ export default function useGenerateShadesPalette({
     targetContrastShades,
     targetColorGamut,
 }) {
-    const [primaryShades, setPrimaryShades] = useState(null)
-    const [secondaryShades, setSecondaryShades] = useState(null)
+    const [primaryShades, setPrimaryShades] = useState([])
+    const [secondaryShades, setSecondaryShades] = useState([])
     const [adjustedTargetContrastShades, setAdjustedTargetContrastShades] = useState(null)
+    const counterObject = { value: 0 }
 
     useEffect(() => {
-        // Calculate the primary shades
-        primaryColor = hexToOklch(primaryColor)
-        lightBg = hexToOklch(lightBg)
-        darkBg = hexToOklch(darkBg)
+        async function calcShades() {
+            primaryColor = hexToOklch(primaryColor)
+            lightBg = hexToOklch(lightBg)
+            darkBg = hexToOklch(darkBg)
 
-        const contrastPrimaryColor = calcApca(primaryColor, lightBg, targetColorGamut)
-        const adjustedTargetContrastShades = replaceClosestInteger(targetContrastShades, contrastPrimaryColor)
-        const primaryShades = calculatePrimaryShades(
-            primaryColor,
-            lightBg,
-            darkBg,
-            adjustedTargetContrastShades,
-            targetColorGamut,
-            contrastPrimaryColor
-        )
-        // Already set the primary shades so they can already be displayed.
-        setAdjustedTargetContrastShades(adjustedTargetContrastShades)
-        setPrimaryShades(sortPrimaryShades(primaryShades))
+            const contrastPrimaryColor = calcApca(primaryColor, lightBg, targetColorGamut)
+            const adjustedTargetContrastShades = replaceClosestInteger(targetContrastShades, contrastPrimaryColor)
+            const primaryShades = calculatePrimaryShades(
+                primaryColor,
+                lightBg,
+                darkBg,
+                adjustedTargetContrastShades,
+                targetColorGamut,
+                contrastPrimaryColor
+            )
+            // Set the primary shades so they can already be displayed.
+            setAdjustedTargetContrastShades(adjustedTargetContrastShades)
+            setPrimaryShades(sortPrimaryShades(primaryShades))
 
-        // Calculate secondary shades
-        const allSecondaryShades = calculateAllSecondaryShades(
-            primaryShades,
-            secondaryColors,
-            lightBg,
-            darkBg,
-            lightnessTolerance,
-            chromacityTolerance,
-            hueTolerance,
-            T,
-            T_min,
-            alpha,
-            targetColorGamut,
-            setSecondaryShades
-        )
+            const worker = new Worker("src/Utils/ShadesPalette/Worker/worker", {
+                name: "secondaryShadesWorker",
+                type: "module",
+            })
+            const { calculateSecondaryShades } = wrap(worker)
+
+            secondaryColors.forEach(async (color) => {
+                const secondaryShade = await calculateSecondaryShades(
+                    primaryShades,
+                    hexToOklch(color),
+                    hexToOklch(lightBg),
+                    hexToOklch(darkBg),
+                    lightnessTolerance,
+                    chromacityTolerance,
+                    hueTolerance,
+                    T,
+                    T_min,
+                    alpha,
+                    targetColorGamut,
+                    counterObject
+                )
+                setSecondaryShades((prevShades) => [...prevShades, sortSecondaryShades(secondaryShade)])
+            })
+        }
+        calcShades()
     }, [])
 
     return { adjustedTargetContrastShades, primaryShades, secondaryShades }
