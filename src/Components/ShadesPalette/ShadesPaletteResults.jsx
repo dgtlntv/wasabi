@@ -1,5 +1,6 @@
 import useGenerateShadesPalette from "../../Hooks/useGenerateShadesPalette"
 import sortTargetContrastShades from "../../Utils/ShadesPalette/sortTargetContrastShades"
+import SkeletonSquare from "../SkeletonLoader/SkeletonSquare"
 
 export default function ShadesPaletteResults({
     lightBg,
@@ -85,7 +86,15 @@ export default function ShadesPaletteResults({
                     })}
                 </div>
             ) : (
-                <p>Generating primary shades...</p>
+                <div
+                    style={{
+                        display: "grid",
+                        gridTemplateColumns: `repeat(${primaryShades.length}, minmax(auto, 1fr))`,
+                        gap: "10px",
+                        padding: "20px",
+                    }}>
+                    <SkeletonSquare count={targetContrastShades * 2} />
+                </div>
             )}
             {secondaryShades ? (
                 <div
