@@ -1,6 +1,4 @@
-import SkeletonSquare from "./SkeletonSquare"
-
-export default function SkeletonGrid({ rows, columns }) {
+export default function SkeletonGrid({ rows, columns, squareColors }) {
     const getDelay = (row, col) => {
         const delayFactor = 0.11
         return `${(row + col) * delayFactor}s`
@@ -11,15 +9,25 @@ export default function SkeletonGrid({ rows, columns }) {
         console.log(rows, columns)
         for (let row = 0; row < rows; row++) {
             for (let col = 0; col < columns; col++) {
+                const color =
+                    squareColors && squareColors[row] && squareColors[row][col]
+                        ? squareColors[row][col]["colorCss"]
+                        : "#ececec"
                 items.push(
                     <div
                         key={`item-${row}-${col}`}
                         style={{
                             opacity: 0,
                             animation: `appear 0.5s ease forwards ${getDelay(row, col)}`,
-                        }}
-                    >
-                        <SkeletonSquare count={1} />
+                        }}>
+                        <div
+                            style={{
+                                backgroundColor: color,
+                                aspectRatio: "1/1",
+                                padding: "10px",
+                                transition: "background-color 2s ease",
+                            }}
+                        />
                     </div>
                 )
             }
@@ -34,8 +42,7 @@ export default function SkeletonGrid({ rows, columns }) {
                 gridTemplateColumns: `repeat(${columns}, minmax(auto, 1fr))`,
                 gap: "10px",
                 padding: "20px",
-            }}
-        >
+            }}>
             {renderGridItems()}
         </div>
     )

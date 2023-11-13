@@ -65,14 +65,6 @@ $increase-font-size-on-larger-screens: false;
     @include vf-icon-plus(#000);
 }
 
-// Skeleton loading
-.skeleton-square {
-    background-color: #ececec;
-    aspect-ratio: 1 / 1;
-    padding: "10px";
-    animation: pulse 3s infinite ease-in-out;
-}
-
 @keyframes pulse {
     0%,
     100% {

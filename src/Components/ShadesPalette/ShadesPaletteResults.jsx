@@ -20,6 +20,7 @@ export default function ShadesPaletteResults({
     targetColorGamut,
     setFormSubmitted,
 }) {
+    const [colors, setColors] = useState(null)
     const { adjustedTargetContrastShades, primaryShades, secondaryShades } = useGenerateShadesPalette({
         lightBg,
         darkBg,
@@ -35,6 +36,10 @@ export default function ShadesPaletteResults({
         targetColorGamut,
     })
 
+    useEffect(() => {
+        setColors([primaryShades, ...secondaryShades])
+    }, [primaryShades, secondaryShades])
+
     return (
         <>
             {adjustedTargetContrastShades ? (
@@ -44,8 +49,7 @@ export default function ShadesPaletteResults({
                         gridTemplateColumns: `repeat(${targetContrastShades.length * 2}, minmax(auto, 1fr))`,
                         gap: "10px",
                         padding: "20px",
-                    }}
-                >
+                    }}>
                     {sortTargetContrastShades(adjustedTargetContrastShades).map((contrastShade, index) => {
                         return (
                             <div key={index} style={{ textAlign: "center", marginBottom: "10px" }}>
@@ -56,7 +60,11 @@ export default function ShadesPaletteResults({
                 </div>
             ) : null}
 
-            <SkeletonGrid rows={secondaryColors.length + 1} columns={targetContrastShades.length * 2} />
+            <SkeletonGrid
+                rows={secondaryColors.length + 1}
+                columns={targetContrastShades.length * 2}
+                squareColors={colors}
+            />
         </>
     )
 }
