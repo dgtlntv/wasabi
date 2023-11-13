@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import hexToOklch from "../Utils/General/hexToOklch"
-import calculateDataVizPalette from "../Utils/DataVizPalette/calculateDataVizPalette"
+import { wrap } from "comlink"
 
 export default function useGenerateDataVizPalette({
     lightBg,
@@ -19,22 +19,31 @@ export default function useGenerateDataVizPalette({
     const [dataVizPalette, setDataVizPalette] = useState(null)
 
     useEffect(() => {
-        const dataVizColors = calculateDataVizPalette(
-            hexToOklch(lightBg),
-            hexToOklch(darkBg),
-            hexToOklch(primaryColor),
-            targetColorGamut,
-            spread,
-            colorblindness,
-            contrast,
-            T,
-            T_min,
-            alpha,
-            perturbOptions,
-            amountOfColors
-        )
+        async function calcPalette() {
+            const worker = new Worker("src/Utils/DataVizPalette/Worker/worker", {
+                name: "paletteWorker",
+                type: "module",
+            })
+            const { calculateDataVizPalette } = wrap(worker)
 
-        setDataVizPalette(dataVizColors)
+            const dataVizColors = await calculateDataVizPalette(
+                hexToOklch(lightBg),
+                hexToOklch(darkBg),
+                hexToOklch(primaryColor),
+                targetColorGamut,
+                spread,
+                colorblindness,
+                contrast,
+                T,
+                T_min,
+                alpha,
+                perturbOptions,
+                amountOfColors
+            )
+
+            setDataVizPalette(dataVizColors)
+        }
+        calcPalette()
     }, [])
 
     return { dataVizPalette }
